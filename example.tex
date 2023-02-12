@@ -1,0 +1,44 @@
+\documentclass[a4paper,12pt]{scrartcl}
+\usepackage{amssymb}
+
+\begin{document}
+\ptconcl[10cm]{Wir werden nur krank, wenn sich entweder Viren oder das Immunsystem ständig ändern.
+-S-
+Wir werden krank und Viren ändern sich nicht.
+-C-
+Also ändert sich das Immunsystem.}
+
+\bigskip\ptconcl{\ptlogic{all x (~Kx -> ~(all y(Vy -> ~Cy) xor all y(Iy -> ~Cy)))}
+-S-
+\ptlogic{all y (Vy -> ~Cy)}
+-S-
+\ptlogic{all x Kx}
+-C-
+\ptlogic{~all y (Iy -> ~Cy)}}
+
+\bigskip\ptkdns{
+a, \ptlogic{all x (~Kx -> ~(all y(Vy -> ~Cy) xor all y(Iy -> ~Cy)))},, P
+b, \ptlogic{all y (Vy -> ~Cy)},, P
+c, \ptlogic{all x Kx},, P
+d, \ptlogic{~Kx' -> ~(all y(Vy -> ~Cy) xor all y(Iy -> ~Cy))}, a&b, US
+e, \ptlogic{(all y (Vy -> ~Cy) xor all y (Iy -> ~Cy)) -> Kx'}, d, AL
+f, \ptlogic{Kx'}, c, US
+g, \ptlogic{all y (Iy -> ~Cy)}, e&f, ??
+}
+
+\bigskip\noindent Die Konklusion konnte nicht aus den Prämissen abgeleitet werden, also ist der Schluss ungültig.
+
+\bigskip\noindent\ptconcl{\ptlogic{~p -> ~(q xor r)}
+-S-
+\ptlogic{q}
+-S-
+\ptlogic{p}
+-C-
+\ptlogic{r}}
+
+\bigskip\ptkdns{
+a, \ptlogic{~p -> ~(q xor r)},, P
+b, \ptlogic{q},, P
+c, \ptlogic{p},, P
+}
+\end{document}
