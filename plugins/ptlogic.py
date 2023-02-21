@@ -12,7 +12,7 @@ class Ptlogic:
     PRETEX_PLUGIN = True
     defines = [ "ptlogic", "ptconcl", "ptkdns" ]
 
-    def compile(self, soup):
+    def compile(self, soup, file):
         # elements = list(soup.find_all("ptlogic"))
         # print("Elements:", elements)
 

@@ -61,6 +61,7 @@ if __name__ == "__main__":
     tmpdir = path
     tmptex = tmpdir+"/"+tmpname+".tex"
     tmppdf = tmpdir+"/"+tmpname+".pdf"
+    compiler_output = ""
 
     try:
         with open(tmptex, 'w') as tmp:
@@ -69,7 +70,8 @@ if __name__ == "__main__":
                 source = "".join(open(infile).readlines())
 
                 print("Compiling...")
-                tmp.write(pretex_compiler(infile, source))
+                compiler_output = pretex_compiler(infile, source)
+                tmp.write(compiler_output)
                 tmp.close()
 
                 # print(tmptex, "".join(open(tmptex).readlines()))
@@ -81,6 +83,9 @@ if __name__ == "__main__":
             except FileNotFoundError:
                 error(infile, "not found!")
     finally:
+        print("Write to...", infile+".out.text")
+        open(infile+".out.tex", 'w').write(compiler_output)
+
         print("Cleaning...")
         shutil.rmtree(tmpdir)
         print("All done.")

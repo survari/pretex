@@ -1,13 +1,17 @@
 \documentclass[a4paper,12pt]{scrartcl}
 \usepackage{amssymb}
+\usepackage{tikz-qtree}
 
 \begin{document}
+
+% \ptconcl
 \ptconcl[10cm]{Wir werden nur krank, wenn sich entweder Viren oder das Immunsystem ständig ändern.
 -S-
 Wir werden krank und Viren ändern sich nicht.
 -C-
 Also ändert sich das Immunsystem.}
 
+% \ptlogic
 \bigskip\ptconcl{\ptlogic{all x (~Kx -> ~(all y(Vy -> ~Cy) xor all y(Iy -> ~Cy)))}
 -S-
 \ptlogic{all y (Vy -> ~Cy)}
@@ -16,6 +20,7 @@ Also ändert sich das Immunsystem.}
 -C-
 \ptlogic{~all y (Iy -> ~Cy)}}
 
+% \ptkdns
 \bigskip\ptkdns{
 a, \ptlogic{all x (~Kx -> ~(all y(Vy -> ~Cy) xor all y(Iy -> ~Cy)))},, P
 b, \ptlogic{all y (Vy -> ~Cy)},, P
@@ -41,4 +46,67 @@ a, \ptlogic{~p -> ~(q xor r)},, P
 b, \ptlogic{q},, P
 c, \ptlogic{p},, P
 }
+
+\bigskip
+
+% \ptast
+Without $\backslash$ptast:
+
+\begin{tikzpicture}[%
+    sibling distance=.5cm,
+    empty/.style={draw=none},
+    tlabel/.style={font=\footnotesize\color{red!70!black}}]
+\Tree
+[.S
+    [.a ]
+    \edge node[tlabel,auto=left] {1};
+    [.S
+        [.a ]
+        \edge node[tlabel,auto=left] {1};
+        [.S \edge node[tlabel,auto=left] {2}; [.$\epsilon$ ] ]
+        [.B \edge node[tlabel,auto=right] {4};
+            [.B \edge node[tlabel,auto=left] {5};
+                [.b ]
+            ]
+            [.b ]
+        ]
+    ]
+    [.B   \edge[empty]; {} \edge node[tlabel,auto=left] {5}; {b}   ]
+]
+\end{tikzpicture}
+
+With $\backslash$ptast:
+
+\ptast{
+    S{
+        a[1],
+        S[2] {
+            a[4],
+            S[5] {$\epsilon$},
+            B[6] {
+                B{b},
+                b
+            }
+        },
+        B[3] {
+            b
+        }
+    }
+}
+
+With $\backslash$ptast:
+
+\ptast{
+    P {
+        a,
+        P {
+            a,
+            P {
+                a,
+                b
+            }
+        }
+    }
+}
+
 \end{document}

@@ -92,9 +92,13 @@ def load_plugin(file):
 
     if PluginClass != None:
         print("Warning: Could not load plugin from", file)
-        return PluginClass()
+
+        if hasattr(PluginClass(), "PRETEX_PLUGIN") == True and PluginClass().PRETEX_PLUGIN == True:
+            return PluginClass()
+
     # finally:
     #     print("Warning: Could not load plugin from", file)
+
     return None
 
 class PreTexPluginBB: pass
@@ -160,6 +164,7 @@ def pretex_compiler(file, source):
 
     contains = True
     counter = 0
+    counters = {}
 
     _start = time.time()
     while contains == True and counter < 10:
@@ -172,9 +177,17 @@ def pretex_compiler(file, source):
 
                 for p in plugins:
                     start = time.time()
-                    soup = TexSoup(str(p.PLUGIN.compile(soup)))
+                    tmp = TexSoup(str(p.PLUGIN.compile(soup, file)))
+                    soup = tmp if tmp != None else soup
                     end = time.time()
-                    print("Finished", p.FILENAME, "plugin in", end - start, "seconds.")
+
+                    if not p.FILENAME in counters:
+                        counters[p.FILENAME] = 0
+
+                    counters[p.FILENAME] += (end - start)
+
+    for k in counters.keys():
+        print("Finished", k, "plugin in", str(counters[k])[0:6], "seconds.")
 
     _end = time.time()
     print("Finished compiling in", _end - _start, "seconds.")
