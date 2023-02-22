@@ -83,7 +83,7 @@ if __name__ == "__main__":
             except FileNotFoundError:
                 error(infile, "not found!")
     finally:
-        print("Write to...", infile+".out.text")
+        print("Write to...", infile+".out.tex")
         open(infile+".out.tex", 'w').write(compiler_output)
 
         print("Cleaning...")
