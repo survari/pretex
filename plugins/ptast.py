@@ -30,6 +30,21 @@ def parse_node(index, string, rd=0):
         if state == "name":
             # print(state, "=>", tmp, nodes)
 
+            if index+2 < len(string) and string[index] == "{" and string[index+1] == "{" and string[index+2] == ".":
+                index += 3
+
+                while index+2 < len(string) and not (string[index] == "." and string[index+1] == "}" and string[index+2] == "}"):
+                    if string[index] == "~":
+                        tmp += string[index+1]
+                        index += 2
+                        continue
+
+                    tmp += string[index]
+                    index += 1
+
+                index += 3
+                continue
+
             if string[index] == "{":
                 if n["content"] == None:
                     n["content"] = tmp.strip()
@@ -107,7 +122,7 @@ def parse_node(index, string, rd=0):
     return (index + 1, nodes)
 
 def make_tikz_from_tree(tree, child_count, child_index):
-    if len(tree["content"].strip()) == 0:
+    if tree["content"] == None or len(tree["content"].strip()) == 0:
         return ""
 
     result = ""
@@ -142,9 +157,12 @@ class Ptast:
     def compile(self, soup, file):
         for element in soup.find_all("ptast"):
             source = "" # str(element.string).strip()
-            options = r"""sibling distance=.5cm,
-     empty/.style={draw=none},
-     ptredlabel/.style={font=\footnotesize\color{red!70!black}}"""
+            options = r"""sibling distance=0.5cm,
+    level distance=1.75cm,
+    growth parent anchor={north},
+    nodes={anchor=north},
+    empty/.style={draw=none},
+    ptredlabel/.style={pos=0.8,font=\footnotesize\color{red!70!black}}"""
 
             if len(list(element.args)) == 1:
                 source = str(element.string).strip()
