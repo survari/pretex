@@ -168,7 +168,10 @@ class Ptast:
                 source = str(element.string).strip()
             else:
                 source = str(element.args[-1])
-                options = str(element.args[0])
+                if str(element.args[0]).strip().startswith("+"):
+                    options += ", " + str(element.args[0]).strip()[1:]
+                else:
+                    options = str(element.args[0])
 
             tree = parse_node(0, source)
             # print(json.dumps(tree, indent=4))
